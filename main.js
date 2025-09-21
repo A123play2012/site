@@ -1,26 +1,25 @@
-// server.js
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
-const app = express();
 
+const app = express();
 app.use(bodyParser.json());
 
-// Статическая страница с фото (ваш текущий сайт)
+// Статические файлы (ваше фото или сайт)
 app.use("/", express.static(path.join(__dirname, "public")));
 
-// Заготовленные ответы — можно вынести в answers.json или в БД
+// Заготовленные ответы
 const answers = {
-	"test": "Hello World!"
+  "test": "Hello World!"
 };
 
-// Endpoint для получения ответа
+// Endpoint для ответов
 app.post("/get_answer", (req, res) => {
-	const msg = (req.body?.message || "").toString().toLowerCase().trim();
-	const answer = answers[msg] ?? "???";
-	res.json({ answer });
+  const msg = (req.body?.message || "").toLowerCase().trim();
+  const answer = answers[msg] ?? "Я не знаю ответа на это сообщение.";
+  res.json({ answer });
 });
 
-// Запуск
+// Yhub сам подставляет PORT через переменную окружения
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
